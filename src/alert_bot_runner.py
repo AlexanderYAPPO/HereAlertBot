@@ -7,10 +7,9 @@ from telegram.ext import CommandHandler
 
 TOKEN = os.environ['ALERT_BOT_TOKEN']
 
-
 def remember(bot, update):
     print(update.message.from_user.username)
-    conn = sqlite3.connect('/var/lib/here_alert_bot/system.db')
+    conn = sqlite3.connect('/tmp/here_alert_bot/system.db')
     c = conn.cursor()
     try:
         c.execute("INSERT INTO users_in_chats VALUES (?, ?)", (update.message.chat_id, update.message.from_user.username))
@@ -25,7 +24,7 @@ def remember(bot, update):
                      text="%s, remembered you, college boy!" % update.message.from_user.first_name)
 
 def alert(bot, update):
-    conn = sqlite3.connect('/var/lib/here_alert_bot/system.db')
+    conn = sqlite3.connect('/tmp/here_alert_bot/system.db')
     c = conn.cursor()
     try:
         c.execute("SELECT * FROM users_in_chats WHERE chat_id=?", (update.message.chat_id, ))
