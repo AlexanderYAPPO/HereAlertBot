@@ -21,7 +21,7 @@ sudo chmod -R u+rw,g+rw,o+rw /var/lib/here_alert_bot/
 sqlite3 /var/lib/here_alert_bot/system.db "CREATE TABLE users_in_chats (chat_id integer, username text, primary key (chat_id, username));"
 ```
 
-##Run the bot
+## Run the bot
 ```bash
 docker run -t -d -i -e ALERT_BOT_TOKEN=<TOKEN> -p 80:80 -v /var/lib/here_alert_bot:/var/lib/here_alert_bot here_alert_bot
 ```
