@@ -84,6 +84,9 @@ def MealSuggestion():
             pass
         self.lock.release()
 
+    def get_info(self):
+        return self.accepted, self.declined
+
     def informer(self):
         # Time interval the reminder works
         notification_interval = 300
@@ -181,6 +184,22 @@ def decline(bot, update):
         return
     current_suggestions[declined_time_structure].decline_user(current_user_id)
 
+def show(bot, update):
+    if not current_suggestions:
+        bot.send_message(chat_id=update.message.chat_id,
+                         text="Now available suggestions.")
+        return
+
+    meal_info_list = []
+    for time_struct, meal_suggestion in current_suggestions.items():
+        time_printed = time.strftime("%H:%M", time_struct)
+        (users_accepted, users_declined) = meal_suggestion.get_info()
+        users_accepted_printed = ' '.join(users_accepted)
+        users_declined_printed = ' '.join(users_declined)
+        meal_info_list.append('%s:\n\taccepted: %s,\n\tdeclined: %s' % (time_printed, users_accepted_printed, users_declined_printed))
+    message = '\n'.join(meal_info_list)
+    bot.send_message(chat_id=update.message.chat_id, text=message)
+
 
 if __name__ == '__main__':
     updater = Updater(token=TOKEN)
@@ -195,4 +214,6 @@ if __name__ == '__main__':
     dispatcher.add_handler(accept_handler)
     decline_handler = CommandHandler('decline', decline)
     dispatcher.add_handler(decline_handler)
+    show_handler = CommandHandler('show', show)
+    dispatcher.add_handler(show_handler)
     updater.start_polling()
