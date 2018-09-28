@@ -6,7 +6,7 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 
 TOKEN = os.environ['ALERT_BOT_TOKEN']
-DB_PATH = '/var/lib/here_alert_bot'
+DB_PATH = '/var/lib/here_alert_bot/system.db'
 
 def remember(bot, update):
     conn = sqlite3.connect(DB_PATH)
